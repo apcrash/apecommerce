@@ -12,6 +12,8 @@ return array(
         'PhlyContact',
         'EdpModuleLayouts',
         'SpeckPaypal',
+        'NeoCore',
+        'NeoTemplate',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
