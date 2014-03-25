@@ -18,7 +18,6 @@ return array(
         'ZfcUserDoctrineORM',
         'ApeUser',
         'Core',
-        'NeoTemplate',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
