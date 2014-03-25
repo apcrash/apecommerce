@@ -3,7 +3,7 @@ return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'Application',
-        'BjyProfiler',
+//        'BjyProfiler',
         'ZendDeveloperTools',
         'ZFTool',
         'DoctrineModule',
@@ -12,7 +12,12 @@ return array(
         'PhlyContact',
         'EdpModuleLayouts',
         'SpeckPaypal',
-        'NeoCore',
+        'ScnSocialAuth',
+        'ScnSocialAuthDoctrineORM',
+        'ZfcUser',
+        'ZfcUserDoctrineORM',
+        'ApeUser',
+        'Core',
         'NeoTemplate',
     ),
 
