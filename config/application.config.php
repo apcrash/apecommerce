@@ -20,6 +20,7 @@ return array(
         'ApeUser',
         'Core',
         'AsseticBundle',
+        'Theme',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
