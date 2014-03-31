@@ -4,7 +4,7 @@ return array(
     'modules' => array(
         'Application',
 //        'BjyProfiler',
-        'ZendDeveloperTools',
+//        'ZendDeveloperTools',
         'ZFTool',
         'DoctrineModule',
         'DoctrineORMModule',
@@ -16,6 +16,7 @@ return array(
         'ScnSocialAuthDoctrineORM',
         'ZfcUser',
         'ZfcUserDoctrineORM',
+        'ZfcRbac',
         'ApeUser',
         'Core',
         'AsseticBundle',
