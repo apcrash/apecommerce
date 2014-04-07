@@ -1,0 +1,172 @@
+<?php
+/**
+ * Default view
+ *
+ * @package     Tax File Number
+ * @subpackage  TFN Registration Payment
+ * @category    View
+ * @version     1.0
+ * @copyright   (c) 2013, Business Switch Pty Ltd
+ * @author      Billy Astilla<blly.astilla@business-switch.com.au>
+ * @modifiedby  Chris Loria <christian.loria@business-switch.com.au>
+ * @modifiedby  Chris Loria <christian.loria@business-switch.com.au>
+ * @modified    24 September 2013
+ * @modified    1 October 2013
+ * @modified    25 October 2013
+ */
+$basePath = 'http'.((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')?'s':'').'://'.$_SERVER['HTTP_HOST'];
+$this->headTitle('Payment');
+$this->inlineScript()->appendFile('https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js', 'text/javascript');
+//$this->inlineScript()->appendFile($basePath . '/min/?g=tfnpayment', 'text/javascript');
+$this->inlineScript()->appendFile($this->basePath() . '/assets/js/vendor/bootstrap.min.js', 'text/javascript');
+$this->inlineScript()->appendFile($this->basePath() . '/assets/js/vendor/select2.min.js', 'text/javascript');
+//$this->inlineScript()->appendFile($this->basePath() . '/assets/js/lib/bs-helper.js', 'text/javascript');
+//$this->inlineScript()->appendFile($this->basePath() . '/assets/js/lib/bs-styler.js', 'text/javascript');
+//$this->inlineScript()->appendFile($this->basePath() . '/assets/js/lib/bs-validator.js', 'text/javascript');
+//$this->inlineScript()->appendFile($this->basePath() . '/assets/js/module/tfn-payment.js', 'text/javascript');
+//$this->inlineScript()->appendFile($this->basePath() . '/assets/js/event/tfn-payment.js', 'text/javascript');
+
+$person = $this->person;
+$address = $this->address;
+$email = $this->emailAdd;
+if (isset($this->paypalToken)) {
+    $paypalToken = $this->paypalToken;
+}
+    
+
+echo '<span class="hide dct" data-val="' . sha1($this->dct) . '"></span>';
+
+?>
+
+<section class="modal-content hide">
+    <div class="modal-process">
+        <img alt="processing" src="assets/img/processing.gif">
+        <hgroup>
+            <h1>Completing the registration process</h1>
+            <p class="process-info"></p>
+        </hgroup>
+    </div>
+<!--    <div class="modal-info">
+        <p>
+            Please do not close this window. We are currently submitting your TFN application to the Australian Tax Office
+            <?php// echo ( !empty($this->business_name) && !empty($this->registration_period_id) &&  strtolower($this->new_business_name) == 'yes' ) ? " and business name application to the Australian Securities & Investments Commission" : " "; ?>
+            and this process can take some time. You will also receive an email from us with the status of your application within the next 20 minutes.
+        </p>
+    </div>-->
+</section>
+
+<div id="inactive-modal" class="modal hide" tabindex="-1">
+    <div class="modal-header">
+        <h4 class="modal-title">Detected Inactivity</h4>
+     </div>
+    <div class="modal-body">
+        <p>Your session is about to automatically end in the next 15 minutes to protect your details. Would you like to continue?</p>
+    </div>
+    <div class="modal-footer">
+         <button type="button" id="continue-form" class="btn btn-primary span2 pull-right">Continue</button>
+    </div>
+</div>
+
+<div id="session-destroyed" class="modal hide" tabindex="-1">
+    <div class="modal-header">
+        <h4 class="modal-title">Session Expired</h4>
+    </div>
+    <div class="modal-body">
+         <p>Your browser session has ended due to inactivity. This is to protect your registration details from unwanted copying. You may start your registration again.</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" id="close-modal" class="btn btn-primary span2 pull-right">Ok</button>
+    </div>
+</div>
+
+<section class="form-content">
+    <div class="container">
+        <h1 class="registration-header">Payment</h1>
+        <form class="form-horizontal form-block" onsubmit="return false;" id="payment-form" >
+          
+            <span class="hide dct" data-val="<?php echo $this->dct;?>"></span>
+            
+            <div class="payment-wrapper">
+                
+                <p>Please review the details of your order.</p>
+
+                <div class="invoice-wrapper">
+                    <table class="invoice" border="0" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr>
+                                <th class="left" colspan="2">Description</th>
+                                <th class="right">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            // List all items bought by user
+                            if(isset($this->ticketList) && is_array($this->ticketList) && !empty($this->ticketList))
+                            {
+                                foreach($this->ticketList as $ticket)
+                                {
+                                    ?>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h4>
+                                                <?php echo $ticket->getTicketName() ?><?php echo ($ticket->getName()) ? ': ' . $ticket->getName() : ''; ?>
+                                                <em class="invoice registration_period"><?php // echo $registrationPeriodtext; ?></em>
+                                            </h4>
+                                            <p>
+                                                <?php echo $ticket->getDescription() ?>
+                                                <br/>
+                                                Includes GST of $ <?php echo number_format($ticket->getGst(), 2); ?>
+                                            </p>
+                                        </td>
+                                        <td class="right">$ <?php echo number_format($ticket->getAmount(), 2); ?></td>
+                                    </tr>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" class="total" align="right"><strong>Total</strong></td>
+                                <td class="total right"><strong>$ <?php echo number_format($this->totalAmount, 2); ?></strong></td>
+                            </tr>
+                            <tr>
+                                <td class="no-padding" colspan="3"><hr class="pull-right payment-hr" /></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="payment-method">
+                    <fieldset>
+                        <?php echo $this->partial('payment/partials/payment-method.phtml'); ?>
+                        <div id="payment-credentials">
+                            
+                        </div>
+                    </fieldset>
+                </div>
+				<div class="form-complete txtcenter">
+                    <button type="button" class="btn btn-large button-green"><?php echo !isset($paypalToken) ? 'Pay and Complete My Application' : 'Confirm Payment'; ?></button>
+				</div>
+            </div>
+            <div class="form-continue">
+                <div id="form-norton" class="clearfix">
+                  <table width="135" cellspacing="0" cellpadding="2" border="0" title="Click to Verify - This site chose Symantec SSL for secure e-commerce and confidential communications.">
+                    <tbody>
+                      <tr>
+                        <td width="135" valign="top" align="center">
+                        <?php if (APPLICATION_ENV == "production" ): ?>                          
+                          <script src="https://seal.verisign.com/getseal?host_name=taxfilenumberaustralia.com.au&amp;size=S&amp;use_flash=YES&amp;use_transparent=YES&amp;lang=en" type="text/javascript"></script><object width="100" height="72" align="" id="s_s" codebase="https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"> <param value="https://seal.verisign.com/getseal?at=1&amp;sealid=2&amp;dn=secure.abnregistration.com.au&amp;lang=en" name="movie"> <param value="false" name="loop"> <param value="false" name="menu"> <param value="best" name="quality"> <param value="transparent" name="wmode"> <param value="always" name="allowScriptAccess"> <embed width="100" height="72" align="" allowscriptaccess="always" pluginspage="https://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" name="s_s" swliveconnect="FALSE" wmode="transparent" quality="best" menu="false" loop="false" src="https://seal.verisign.com/getseal?at=1&amp;sealid=2&amp;dn=secure.abnregistration.com.au&amp;lang=en"></object></td>
+                        <?php endif; ?>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p class="form-security pull-left">Information submitted through this website is secured with 256-bit encryption. Secure payments processed by PayPal.</p>
+              </div>
+            </div>
+        </form>
+    </div>
+
+</section>
+<?php
+/* End of file index.phtml */
+/* Location: ./module/Payment/view/payment/payment/index.phtml */

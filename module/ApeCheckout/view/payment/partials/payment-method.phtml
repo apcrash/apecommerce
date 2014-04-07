@@ -1,0 +1,17 @@
+<div class="control-group">
+    <label class="control-label">Payment method:</label>
+    <div class="controls">
+        <!--
+        <input type="radio" value="paypal-pro" id="paypal-pro" name="payment_method" <?php echo $this->disabled; ?> <?php echo $this->paypal_pro_checked; ?>>
+        <label for="paypal-pro" class="payment-label"><span id="icon-paypal-pro"></span></label>
+        -->
+        <input type="radio" value="paypal-pro" id="mastercard" data-value="Mastercard" name="payment_method" <?php echo $this->disabled; ?> <?php echo $this->mastercard_checked; ?>>
+        <label for="mastercard" class="payment-label" data-card-type="Mastercard"><span id="icon-mastercard"></span></label>
+
+        <input type="radio" value="paypal-pro" id="visa" data-value="Visa" name="payment_method" <?php echo $this->disabled; ?>>
+        <label for="visa" class="payment-label" data-card-type="Visa"><span id="icon-visa"></span></label>
+
+        <input type="radio" value="paypal" id="paypal" name="payment_method" <?php echo $this->disabled; ?>>
+        <label for="paypal" class="payment-label"><span id="icon-paypal"></span></label>
+    </div>
+</div>

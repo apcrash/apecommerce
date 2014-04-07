@@ -1,0 +1,75 @@
+<div id="credit-card">                                                                    
+    <div class="control-group">
+        <label class="control-label" for="payment-given-name">Credit card details:</label>
+        <div class="controls">
+            <input type="hidden" class="payment_token" name="<?php echo $this->csrf_token; ?>" value="token">
+            <input type="text" class="grid field-6 required" name="paymentDetails[givenName]" id="payment-given-name" value="<?php echo $this->person['givenName']; ?>">
+            <input type="text" class="grid field-6 required" name="paymentDetails[lastName]" id="payment-last-name" value="<?php echo $this->person['lastName']; ?>">
+        </div>
+        <div class="controls">
+            <label class="control-block grid field-6 last" for="payment-given-name"><i class="helper">Given name</i></label>
+            <label class="control-block grid field-6 last" for="payment-last-name"><i class="helper">Last name</i></label>
+        </div>
+    </div>
+    <input id="card_type" type="hidden" name="paymentDetails[cardType]" >
+    <div class="control-group">
+        <label class="control-label" for="payment-card-number">Card number:</label>
+        <div class="controls">
+            <input type="text" class="grid field-12 required digit" name="paymentDetails[cardNumber]" id="payment-card-number">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="payment-expiration-date" data-label="security code">Expiration date:</label>
+        <div class="controls">
+        <select id="payment-expiration-month" class="date-month field-4 select" name="paymentDetails[month]"></select>
+        <select id="payment-expiration-year" class="date-year field-3 select" name="paymentDetails[year]" data-expiration="true"></select>
+            <input type="text" class="grid field-3 required digit" name="paymentDetails[cvn]" id="payment-security-code">
+            <span class="cvc field-2 control-block"></span>
+        </div>
+        <div id="card_expiration_label" class="controls">
+            <label class="control-block grid field-4 last" for="payment-expiration-month"><i class="helper">Month</i></label>
+            <label class="control-block grid field-3 last" for="payment-expiration-year"><i class="helper">Year</i></label>
+            <label class="control-block grid field-3 last" for="payment-security-code"><i class="helper">Security code</i></label><br/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="payment-street-name">Billing address:</label>
+        <div class="controls">
+            <input type="text" class="grid field-12 required" name="paymentDetails[street]" id="payment-street-name" value="<?php echo $address['street_number'] . ' ' . $address['street_name'] . ' ' . $address['street_type']; ?>">
+        </div>
+        <div class="controls">
+            <label class="control-block grid field-12 required" for="payment-street-name"><i class="helper">Unit/Number, Name of building, Street</i></label>
+        </div>
+        <div class="controls">
+            <input type="text" class="grid field-6 required" name="paymentDetails[city]" id="payment-city" value="<?php echo $address['city']; ?>">
+            <input type="text" class="grid field-6 required" name="paymentDetails[state]" id="payment-state" value="<?php echo $address['state']; ?>">
+        </div>
+        <div class="controls">
+            <label class="control-block grid field-6 required" for="payment-city"><i class="helper">City</i></label>
+            <label class="control-block grid field-6 required" for="payment-state"><i class="helper">State</i></label><br/>
+        </div>
+        <div class="controls">
+            <input type="text" class="grid field-6 required" name="paymentDetails[postalCode]" id="payment-postcode" value="<?php echo $address['postal_code']; ?>">
+            <select id="payment-country" data-searchable="true" name="paymentDetails[countryCode]" class="field-6 select country-field">
+                <?php
+                foreach($countries as $country)
+                {
+                    echo '<option value="' . $country['countryCode'] . '"' . ($country['countryCode'] == $this->payerInfo->address['countryCode'] ? ' selected="selected"' : '') . '>' . $country['country'] . '</option>';
+                }
+                ?>
+            </select>
+        </div>
+        <div class="controls">
+            <label class="control-block grid field-6 last" for="payment-postcode"><i class="helper">Postcode</i></label>
+            <label class="control-block grid field-6 last" for="payment-country"><i class="helper">Country</i></label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="payment-email">Email receipt to:</label>
+        <div class="controls">
+            <input type="text" class="grid field-12 valid-email required" name="paymentDetails[email]" id="payment-email" value="<?php echo $email['email']; ?>">
+            <a class="info" data-original-title="Email Receipt to" data-content="A copy of this receipt will be emailed to this address."
+               onclick="return false" data-trigger="hover" data-placement="top" data-toggle="popover"></a>
+        </div>
+    </div>
+</div>
